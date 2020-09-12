@@ -274,7 +274,7 @@ def load_and_cache_examples(config, task, tokenizer, evaluate=False, test=False)
     else:
         logger.info("Creating features from dataset file at %s",
                     config.data_dir)
-        label_list = processor.get_labels()
+        label_list = processor.get_labels(config.task_name)
         examples = processor.get_dev_examples(
             config.data_dir) if evaluate else processor.get_train_examples(config.data_dir)
         features = convert_examples_to_features(
