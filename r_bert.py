@@ -26,7 +26,7 @@ from transformers import (WEIGHTS_NAME, BertConfig, BertTokenizer)
 
 from transformers import AdamW, get_linear_schedule_with_warmup
 
-from utils import (SEMEVAL_RELATION_LABELS, TACRED_RELATION_LABELS, compute_metrics, 
+from utils import (SEMEVAL_RELATION_LABELS, TACRED_RELATION_LABELS, CTG_RELATION_LABELS, compute_metrics, 
     convert_examples_to_features, output_modes, data_processors)
 import torch.nn.functional as F
 
@@ -244,6 +244,12 @@ def evaluate(config, model, tokenizer, prefix=""):
             for pred in preds:
                 writer.write(TACRED_RELATION_LABELS[pred])
                 writer.write("\n")
+    if config.task_name == "ctg":
+        output_eval_file = "eval/ctg.txt"
+        with open(output_eval_file, "w") as writer:
+            for key in range(len(preds)):
+                writer.write("%d\t%s\n" %
+                             (key+8001, str(CTG_RELATION_LABELS[preds[key]])))
     return result
 
 
@@ -339,7 +345,7 @@ def main():
 
     # Prepare task -- SemEval or TACRED
     processor = data_processors[config.task_name]()
-    label_list = processor.get_labels()
+    label_list = processor.get_labels(config.task_name)
     num_labels = len(label_list)
 
     # Load pretrained model and tokenizer
@@ -359,6 +365,7 @@ def main():
         torch.distributed.barrier()
 
     model.to(config.device)
+    model.resize_token_embeddings(len(tokenizer))
 
     # logger.info("Training/evaluation parameters %s", config)
 

@@ -56,6 +56,11 @@ TACRED_RELATION_LABELS = ['org:founded_by', 'no_relation', 'per:employee_of', 'o
     'org:founded', 'per:country_of_birth', 'per:date_of_birth', 'per:city_of_birth', 'per:charges', 
     'per:country_of_death']
 
+if os.path.exists('ctg_data'):
+    with open(os.path.join('ctg_data','relation2id.tsv')) as fin:
+        CTG_RELATION_LABELS = [ l for l in fin.read().split('\n') if l.strip() != '' ]
+else:
+    CTG_RELATION_LABELS = []
 
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
@@ -143,9 +148,9 @@ class SemEvalProcessor(DataProcessor):
         return self._create_examples(
             self._read_tsv(os.path.join(data_dir, "dev.tsv")), "dev")
 
-    def get_labels(self):
+    def get_labels(self, task_name):
         """See base class."""
-        return [str(i) for i in range(19)]
+        return [str(i) for i in range(GLUE_TASKS_NUM_LABELS[task_name])]
 
     def _create_examples(self, lines, set_type):
         """Creates examples for the training and dev sets.
@@ -178,10 +183,10 @@ class TacredProcessor(DataProcessor):
         return self._create_examples(
             self._read_tsv(os.path.join(data_dir, "dev.tsv")), "dev")
 
-    def get_labels(self):
+    def get_labels(self, task_name):
         """See base class."""
-        return [str(i) for i in range(42)]
-
+        return [str(i) for i in range(GLUE_TASKS_NUM_LABELS[task_name])]
+        
     def _create_examples(self, lines, set_type):
         """Creates examples for the training and dev sets.
         e.g.,: 
@@ -421,14 +426,17 @@ def compute_metrics(task_name, preds, labels):
 data_processors = {
     "semeval": SemEvalProcessor,
     "tacred": TacredProcessor,
+    "ctg": SemEvalProcessor
 }
 
 output_modes = {
     "semeval": "classification",
     "tacred": "classification",
+    "ctg": "classification"
 }
 
 GLUE_TASKS_NUM_LABELS = {
     "semeval": 19,
     "tacred": 42,
+    "ctg": 98
 }
