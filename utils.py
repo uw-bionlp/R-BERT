@@ -302,6 +302,9 @@ def convert_examples_to_features(examples, label_list, max_seq_len,
                 e1_mask[i] = 1
             for i in range(e21_p, e22_p):
                 e2_mask[i] = 1
+            
+        if len(input_ids) > max_seq_len:
+            continue
 
         assert len(input_ids) == max_seq_len, f"Error in sample: {ex_index}, len(input_ids)={len(input_ids)}"
         assert len(input_mask) == max_seq_len

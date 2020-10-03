@@ -343,6 +343,13 @@ def main():
     # Set seed
     set_seed(config.seed)
 
+    # Add ctg-specific special tokens if ctg
+    if config.task_name == "ctg":
+        with open(os.path.join('ctg_data', 'types.tsv')) as fin:
+            types =  [ t.strip() for t in fin.readlines() ]
+            for t in types:
+                additional_special_tokens.append(t)
+
     # Prepare task -- SemEval or TACRED
     processor = data_processors[config.task_name]()
     label_list = processor.get_labels(config.task_name)

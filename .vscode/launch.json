@@ -11,8 +11,8 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "args": 
-                // [ "--config", "config_ctg.ini" ]
-                [ "eval/ctg_no_other.txt", "ctg_data/dev.tsv" ]
+                [ "--config", "config_ctg.ini" ]
+                //[ "eval/ctg_no_other.txt", "ctg_data/dev.tsv" ]
         }
     ]
 }
