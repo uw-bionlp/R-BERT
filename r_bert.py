@@ -249,7 +249,7 @@ def evaluate(config, model, tokenizer, prefix=""):
         with open(output_eval_file, "w") as writer:
             for key in range(len(preds)):
                 writer.write("%d\t%s\n" %
-                             (key+8001, str(CTG_RELATION_LABELS[preds[key]])))
+                             (key, str(CTG_RELATION_LABELS[preds[key]])))
     return result
 
 
