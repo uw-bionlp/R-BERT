@@ -62,6 +62,19 @@ if os.path.exists('ctg_data'):
 else:
     CTG_RELATION_LABELS = []
 
+if os.path.exists('ctg_data_no_other'):
+    with open(os.path.join('ctg_data_no_other','relation2id.tsv')) as fin:
+        CTG_NO_OTHER_RELATION_LABELS = [ l for l in fin.read().split('\n') if l.strip() != '' ]
+else:
+    CTG_NO_OTHER_RELATION_LABELS = []
+
+if os.path.exists('ctg_data_other'):
+    with open(os.path.join('ctg_data_other','relation2id.tsv')) as fin:
+        CTG_OTHER_RELATION_LABELS = [ l for l in fin.read().split('\n') if l.strip() != '' ]
+else:
+    CTG_OTHER_RELATION_LABELS = []
+
+
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
 
@@ -429,17 +442,23 @@ def compute_metrics(task_name, preds, labels):
 data_processors = {
     "semeval": SemEvalProcessor,
     "tacred": TacredProcessor,
-    "ctg": SemEvalProcessor
+    "ctg": SemEvalProcessor,
+    "ctg_other": SemEvalProcessor,
+    "ctg_no_other": SemEvalProcessor
 }
 
 output_modes = {
     "semeval": "classification",
     "tacred": "classification",
-    "ctg": "classification"
+    "ctg": "classification",
+    "ctg_other": "classification",
+    "ctg_no_other": "classification"
 }
 
 GLUE_TASKS_NUM_LABELS = {
     "semeval": 19,
     "tacred": 42,
-    "ctg": 98
+    "ctg": 96,
+    "ctg_other": 2,
+    "ctg_no_other": 95
 }

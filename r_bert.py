@@ -26,7 +26,7 @@ from transformers import (WEIGHTS_NAME, BertConfig, BertTokenizer)
 
 from transformers import AdamW, get_linear_schedule_with_warmup
 
-from utils import (SEMEVAL_RELATION_LABELS, TACRED_RELATION_LABELS, CTG_RELATION_LABELS, compute_metrics, 
+from utils import (SEMEVAL_RELATION_LABELS, TACRED_RELATION_LABELS, CTG_RELATION_LABELS, CTG_NO_OTHER_RELATION_LABELS, CTG_OTHER_RELATION_LABELS, compute_metrics, 
     convert_examples_to_features, output_modes, data_processors)
 import torch.nn.functional as F
 
@@ -244,12 +244,24 @@ def evaluate(config, model, tokenizer, prefix=""):
             for pred in preds:
                 writer.write(TACRED_RELATION_LABELS[pred])
                 writer.write("\n")
-    if config.task_name == "ctg":
+    elif config.task_name == "ctg":
         output_eval_file = "eval/ctg.txt"
         with open(output_eval_file, "w") as writer:
             for key in range(len(preds)):
                 writer.write("%d\t%s\n" %
                              (key, str(CTG_RELATION_LABELS[preds[key]])))
+    elif config.task_name == "ctg_no_other":
+        output_eval_file = "eval/ctg_no_other.txt"
+        with open(output_eval_file, "w") as writer:
+            for key in range(len(preds)):
+                writer.write("%d\t%s\n" %
+                             (key, str(CTG_NO_OTHER_RELATION_LABELS[preds[key]])))
+    elif config.task_name == "ctg_other":
+        output_eval_file = "eval/ctg_other.txt"
+        with open(output_eval_file, "w") as writer:
+            for key in range(len(preds)):
+                writer.write("%d\t%s\n" %
+                             (key, str(CTG_OTHER_RELATION_LABELS[preds[key]])))
     return result
 
 
@@ -344,7 +356,7 @@ def main():
     set_seed(config.seed)
 
     # Add ctg-specific special tokens if ctg
-    if config.task_name == "ctg":
+    if config.task_name.startswith("ctg"):
         with open(os.path.join('ctg_data', 'types.tsv')) as fin:
             types =  [ t.strip() for t in fin.readlines() ]
             for t in types:

@@ -98,8 +98,8 @@ def score(key, prediction, verbose=False):
 if __name__ == "__main__":
     # Parse the arguments from stdin
     args = parse_arguments()
-    key = [str(line).rstrip('\n') for line in open(str(args.gold_file))]
-    prediction = [str(line).rstrip('\n') for line in open(str(args.pred_file))]
+    key = [str(line).rstrip('\n').split('\t')[-1] for line in open(str(args.gold_file))]
+    prediction = [str(line).rstrip('\n').split('\t')[-1] for line in open(str(args.pred_file))]
 
     # Check that the lengths match
     if len(prediction) != len(key):
