@@ -1,6 +1,5 @@
+import os
 from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
-
-
 
 
 tokenizer = AutoTokenizer.from_pretrained('output/ctg_binary')
@@ -14,7 +13,7 @@ with open('ctg_data/dev.tsv') as fin:
         if ln == '':
             continue
         data.append(ln.split('\t'))
-        if len(data) == 500:
+        if len(data) == 50:
             break
 
 correct = 0

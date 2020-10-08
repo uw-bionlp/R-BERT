@@ -317,6 +317,7 @@ def convert_examples_to_features(examples, label_list, max_seq_len,
                 e2_mask[i] = 1
             
         if len(input_ids) > max_seq_len:
+            print(f'Line {ex_index} is too long, dropping!')
             continue
 
         assert len(input_ids) == max_seq_len, f"Error in sample: {ex_index}, len(input_ids)={len(input_ids)}"

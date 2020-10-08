@@ -2,7 +2,7 @@ import os
 import sys
 import random
 
-in_dir = 'ctg_data'
+in_dir = 'ctg_data_all'
 out_dir = 'ctg_data_reduced_other'
 out_path = os.path.join(out_dir, 'train.tsv')
 
@@ -14,8 +14,6 @@ for fl in [ 'train.tsv', 'test.tsv' ]:
             if ln == '':
                 continue
             label = ln.split('\t')[-1]
-            if 'Name(' in label:
-                continue
             if label == 'Other':
                 others.append(ln)
             else:
