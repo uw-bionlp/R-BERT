@@ -1,8 +1,8 @@
 import os
 import sys
 
-in_dir = 'ctg_data_all'
-pred_file = os.path.join('eval', 'ctg_all.txt')
+in_dir = 'ctg_data_5050'
+pred_file = os.path.join('eval', 'ctg_7525.txt')
 
 
 def clean_label(label):
@@ -14,11 +14,11 @@ def clean_label(label):
 
 
 def main():
-    with open(os.path.join(in_dir, 'relation_combinations.tsv')) as fin:
+    with open(os.path.join(in_dir, 'relations_with_predicate.tsv')) as fin:
         known_rels = { tuple(l.strip().split('\t')) for l in fin.readlines() if l != '' }
 
     with open(os.path.join(in_dir, 'dev.tsv')) as fin:
-        gold = [ l.strip().split('\t') for l in fin.readlines() if l != '' ]
+        gold = [ l.strip().split('\t') for l in fin.readlines() if l != '' and not l.startswith('#') ]
 
     with open(pred_file) as fin:
         pred = [ l.strip().split('\t')[1] for l in fin.readlines() if l != '' ]
@@ -31,8 +31,8 @@ def main():
         id, text, label_id, label = g
         orig_label = label
         orig_p = p
-        label = clean_label(label)
-        p = clean_label(p)
+        #label = clean_label(label)
+        #p = clean_label(p)
 
         e11_idx = text.find('[E11] ')
         e21_idx = text.find('[E21] ')
@@ -49,8 +49,7 @@ def main():
         #    print(f'Predicted: {orig_p}')
         #    print(f'   Actual: {orig_label}\n')
 
-        pred_rel = (e1, e2, p) if 'E1,E2' in orig_p else (e2, e1, p)
-        possible = pred_rel in known_rels
+        possible = (e1, e2, p) in known_rels
         
         if p != 'Other' and not possible:
             fixable += 1

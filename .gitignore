@@ -1,9 +1,4 @@
-_ctg_data/
-ctg_data/
-ctg_data_all/
-ctg_data_no_other/
-ctg_data_other/
-ctg_data_reduced_other/
+ctg_data*/
 output/
 .vscode/
 

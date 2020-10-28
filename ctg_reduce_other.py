@@ -2,8 +2,8 @@ import os
 import sys
 import random
 
-in_dir = 'ctg_data_all'
-out_dir = 'ctg_data_reduced_other'
+in_dir = 'ctg_data_full'
+out_dir = 'ctg_data_8020'
 out_path = os.path.join(out_dir, 'train.tsv')
 
 others, no_others = [], []
@@ -21,7 +21,7 @@ for fl in [ 'train.tsv', 'test.tsv' ]:
         
 others_cnt = len(others)        
 no_others_cnt = len(no_others)
-desired_others_cnt = int(no_others_cnt)
+desired_others_cnt = int(no_others_cnt) * 4
 
 sampled = random.sample(others, desired_others_cnt)
 sample_len = len(sampled)

@@ -459,7 +459,7 @@ output_modes = {
 GLUE_TASKS_NUM_LABELS = {
     "semeval": 19,
     "tacred": 42,
-    "ctg": 96,
+    "ctg": 97,
     "ctg_other": 2,
     "ctg_no_other": 95
 }
